@@ -1,0 +1,19 @@
+# Visual Studio
+.vs/
+**/bin/
+**/obj/
+*.user
+*.suo
+
+# VSTO signing certificates
+*.pfx
+*.p12
+
+# Local configuration
+.env
+.env.*
+appsettings.Development.json
+
+# Test results
+TestResults/
+*.trx
