@@ -17,3 +17,6 @@ appsettings.Development.json
 # Test results
 TestResults/
 *.trx
+
+# Nested Git repositories and local backups
+**/.git.backup/
