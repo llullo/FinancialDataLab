@@ -217,6 +217,12 @@
     </Compile>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FinancialDataLab.Application\FinancialDataLab.Application.csproj">
+      <Project>{110e5da1-9953-4e81-953f-9dc9efebbffb}</Project>
+      <Name>FinancialDataLab.Application</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
