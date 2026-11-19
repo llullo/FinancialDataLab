@@ -5,18 +5,22 @@
 *.user
 *.suo
 
-# VSTO signing certificates
-*.pfx
-*.p12
+# NuGet restored packages
+packages/
+**/packages/
 
-# Local configuration
+# Local Git backups
+**/.git.backup/
+
+# Local secrets
 .env
 .env.*
-appsettings.Development.json
+!.env.example
+
+# Signing certificates
+*.pfx
+*.p12
 
 # Test results
 TestResults/
 *.trx
-
-# Nested Git repositories and local backups
-**/.git.backup/
