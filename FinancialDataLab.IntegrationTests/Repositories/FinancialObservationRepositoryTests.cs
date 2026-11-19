@@ -62,6 +62,44 @@ namespace FinancialDataLab.IntegrationTests.Repositories
         }
 
         [Fact]
+        public void GetPage_ReturnsCorrectRowsForEachPage()
+        {
+            var repository = new FinancialObservationRepository(
+                BuildConnectionString());
+
+            DateTime from = new DateTime(2026, 11, 16);
+            DateTime to = new DateTime(2026, 11, 18);
+
+            var firstPage = repository.GetPage(
+                "EURUSD", from, to, 1, 2);
+
+            var secondPage = repository.GetPage(
+                "EURUSD", from, to, 2, 2);
+
+            Assert.Equal(2, firstPage.Count);
+            Assert.Single(secondPage);
+
+            Assert.Equal(1.158200m, firstPage[0].Value);
+            Assert.Equal(1.160100m, firstPage[1].Value);
+            Assert.Equal(1.157500m, secondPage[0].Value);
+        }
+
+        [Fact]
+        public void GetPage_WhenPageNumberIsInvalid_Throws()
+        {
+            var repository = new FinancialObservationRepository(
+                BuildConnectionString());
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                repository.GetPage(
+                    "EURUSD",
+                    new DateTime(2026, 11, 16),
+                    new DateTime(2026, 11, 18),
+                    0,
+                    100));
+        }
+
+        [Fact]
         public void GetPage_ReturnsExpectedPageSize()
         {
             var repository = new FinancialObservationRepository(
