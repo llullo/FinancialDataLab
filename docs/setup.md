@@ -58,19 +58,28 @@ There are two consumers of the local password, configured differently:
 
 Do not put the password in C# code or the repository. A user environment variable and the local `.env` file are convenient local-development configuration, not a managed secrets vault; the project currently connects as `sa`. The ribbon also sets `TrustServerCertificate=true` for its localhost connection, which is not an appropriate general production setting.
 
-## Open, build, and run Excel
+## Building from a Clean Clone
 
-1. Open `FinancialDataLab.slnx` in Visual Studio.
-2. Restore NuGet packages if Visual Studio prompts; the test projects use `packages.config`.
-3. Set `FinancialDataLab` (the VSTO add-in project) as the startup project and build the solution.
-4. With SQL Server running, the database seeded, and the per-user password configured, press **F5** to start debugging. Visual Studio should launch Excel with the add-in.
-5. Open a workbook. On the **Financial Data Lab** tab, choose **Load Observations**. The ribbon currently requests indicator `EURUSD_DEMO` in pages of 100, from midnight November 1, 2026 through midnight March 1, 2027. The repository's end-date comparison is inclusive, but the midnight end value does not include later times on March 1. Use **Previous Page** and **Next Page** to navigate. Output is written to a worksheet named `FDL Data`.
+A clean-clone build and F5 launch were verified in Visual Studio 2026. For the current development version, use the `develop` branch, which contains the implemented features; `main` may not include the latest changes until the release PR is merged.
 
-## Local VSTO manifest signing
+1. Clone the repository, then switch to `develop` from the repository directory:
 
-The VSTO project has `SignManifests` enabled and points `ManifestKeyFile` to `FinancialDataLab_TemporaryKey.pfx` in the VSTO project directory. `.pfx` files are ignored by Git, so that key file is not included in a clean checkout. Since the build signs the VSTO manifests, the missing key can prevent a successful build, not only add-in launch.
+   ```powershell
+   git clone <repository-url>
+   cd FinancialDataLab
+   git switch develop
+   ```
 
-On the developer machine, open the `FinancialDataLab` project properties in Visual Studio and go to **Signing**. Keep **Sign the ClickOnce manifests** enabled and use **Create Test Certificate** to create a local development certificate, or select an existing developer test certificate. Confirm Visual Studio has a valid local key file configured for the manifest signing settings (the project key path is `FinancialDataLab_TemporaryKey.pfx`); save the project properties and rebuild. Visual Studio may update the project's local certificate path or thumbprint when creating or selecting a certificate. Do not commit project-file changes made only for local signing, and never commit or distribute the `.pfx` or use a self-signed development certificate for public release signing.
+2. Open `FinancialDataLab.slnx` in Visual Studio 2026 and restore the required NuGet packages. The test projects use `packages.config`; restore them through Visual Studio/NuGet if they are not restored automatically.
+3. In Solution Explorer, right-click the `FinancialDataLab` VSTO project and select **Properties**, then open **Signing**.
+4. Keep **Sign the ClickOnce manifests** enabled. Click **Create Test Certificate** to generate a local development certificate. Do not enable assembly signing unless your development or release process specifically requires it.
+5. Keep the generated `.pfx` private and excluded from Git. Creating the certificate may modify `FinancialDataLab.csproj`, including its manifest certificate thumbprint and/or local key reference. These machine-specific changes are for local clean-clone validation and must not be committed.
+6. Rebuild the solution. If Visual Studio changed the startup project, right-click the `FinancialDataLab` VSTO project and select **Set as Startup Project**.
+7. Press **F5**. Excel should launch with the add-in; verify that the **Financial Data Lab** ribbon tab appears.
+
+This test certificate and manifest configuration are for local development/debugging only. They do not produce a production-ready signed VSTO installer. Distribution requires a separately managed release-signing certificate and an appropriate deployment/publisher trust process; do not distribute the local test `.pfx`.
+
+After the ribbon appears, open a workbook to try the data actions. To retrieve observations, also start and seed the local SQL Server as described above and configure `FINANCIALDATALAB_SQL_PASSWORD` as described in [Local connection configuration](#local-connection-configuration). The ribbon currently requests indicator `EURUSD_DEMO` in pages of 100, from midnight November 1, 2026 through midnight March 1, 2027. The repository's end-date comparison is inclusive, but the midnight end value does not include later times on March 1. Output is written to a worksheet named `FDL Data`.
 
 ## Run tests
 
