@@ -14,37 +14,86 @@ namespace FinancialDataLab
         }
 
 
+
+        private const int PageSize = 100;
+
         private void btnLoadObservations_Click(
             object sender,
             RibbonControlEventArgs e)
         {
+            LoadPage(1);
+        }
+
+        private void btnNextPage_Click(
+            object sender,
+            RibbonControlEventArgs e)
+        {
+            var workbook = Globals.ThisAddIn.Application.ActiveWorkbook;
+
+            if (workbook == null)
+            {
+                MessageBox.Show("Open a workbook first.");
+                return;
+            }
+
+            var exporter = new ExcelObservationExporter();
+            int currentPage = exporter.GetCurrentPage(workbook);
+
+            if (currentPage == 0)
+            {
+                MessageBox.Show("Load observations first.");
+                return;
+            }
+
+            LoadPage(currentPage + 1);
+        }
+
+        private void btnPreviousPage_Click(
+            object sender,
+            RibbonControlEventArgs e)
+        {
+            var workbook = Globals.ThisAddIn.Application.ActiveWorkbook;
+
+            if (workbook == null)
+            {
+                MessageBox.Show("Open a workbook first.");
+                return;
+            }
+
+            var exporter = new ExcelObservationExporter();
+            int currentPage = exporter.GetCurrentPage(workbook);
+
+            if (currentPage <= 1)
+            {
+                MessageBox.Show("You are already on the first page.");
+                return;
+            }
+
+            LoadPage(currentPage - 1);
+        }
+
+        private void LoadPage(int pageNumber)
+        {
             try
             {
-                // Get the active Excel workbook.
                 var workbook = Globals.ThisAddIn.Application.ActiveWorkbook;
 
                 if (workbook == null)
                 {
-                    MessageBox.Show(
-                        "Please open an Excel workbook first.",
-                        "Financial Data Lab");
+                    MessageBox.Show("Open an Excel workbook first.");
                     return;
                 }
 
-                // Read the SQL Server password from the local environment.
                 string password = Environment.GetEnvironmentVariable(
                     "FINANCIALDATALAB_SQL_PASSWORD",
                     EnvironmentVariableTarget.User);
 
                 if (string.IsNullOrWhiteSpace(password))
                 {
-                    MessageBox.Show(
-                        "SQL Server password is not configured.",
-                        "Financial Data Lab");
+                    MessageBox.Show("SQL Server password is not configured.");
                     return;
                 }
 
-                // Configure the local SQL Server connection.
                 var connectionBuilder = new SqlConnectionStringBuilder
                 {
                     DataSource = "127.0.0.1,1433",
@@ -56,28 +105,31 @@ namespace FinancialDataLab
                     ConnectTimeout = 5
                 };
 
-                // Create the ADO.NET repository.
                 var repository = new FinancialObservationRepository(
                     connectionBuilder.ConnectionString);
 
-                // Retrieve the first 100 observations using OFFSET/FETCH.
                 var observations = repository.GetPage(
                     "EURUSD_DEMO",
                     new DateTime(2026, 11, 1),
                     new DateTime(2027, 3, 1),
-                    pageNumber: 1,
-                    pageSize: 100);
+                    pageNumber,
+                    PageSize);
 
-                // Export the results to Excel.
+                if (observations.Count == 0)
+                {
+                    MessageBox.Show(
+                        "No more observations available.",
+                        "Financial Data Lab");
+                    return;
+                }
+
                 var exporter = new ExcelObservationExporter();
 
-                exporter.Export(workbook, observations);
+                exporter.Export(workbook, observations, pageNumber);
 
                 MessageBox.Show(
-                    $"{observations.Count} observations loaded successfully.",
-                    "Financial Data Lab",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    $"Page {pageNumber}: {observations.Count} observations loaded.",
+                    "Financial Data Lab");
             }
             catch (SqlException ex)
             {
@@ -90,8 +142,8 @@ namespace FinancialDataLab
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    $"Unable to load observations:\n{ex.Message}",
-                    "Financial Data Lab",
+                    ex.ToString(),
+                    "Financial Data Lab - Debug",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
