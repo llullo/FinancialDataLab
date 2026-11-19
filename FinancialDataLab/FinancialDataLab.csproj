@@ -126,6 +126,7 @@
     </Reference>
     <Reference Include="Microsoft.Office.Tools.Excel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <Private>False</Private>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -185,9 +186,19 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Excel\ExcelObservationExporter.cs" />
+    <Compile Include="FinancialDataRibbon.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FinancialDataRibbon.Designer.cs">
+      <DependentUpon>FinancialDataRibbon.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="FinancialDataRibbon.resx">
+      <DependentUpon>FinancialDataRibbon.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -221,6 +232,10 @@
     <ProjectReference Include="..\FinancialDataLab.Application\FinancialDataLab.Application.csproj">
       <Project>{110e5da1-9953-4e81-953f-9dc9efebbffb}</Project>
       <Name>FinancialDataLab.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FinancialDataLab.Infrastructure\FinancialDataLab.Infrastructure.csproj">
+      <Project>{153ff995-e682-45b3-a83d-08242c319308}</Project>
+      <Name>FinancialDataLab.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -205,23 +205,35 @@ namespace FinancialDataLab.Infrastructure.Repositories
             int pageSize)
         {
             if (string.IsNullOrWhiteSpace(indicatorCode))
+            {
                 throw new ArgumentException(
-                    "Indicator code is required.", nameof(indicatorCode));
+                    "Indicator code cannot be empty.",
+                    nameof(indicatorCode));
+            }
 
             if (fromDate > toDate)
-                throw new ArgumentException("Invalid date range.");
+            {
+                throw new ArgumentException(
+                    "From date cannot be greater than to date.");
+            }
 
             if (pageNumber < 1)
+            {
                 throw new ArgumentOutOfRangeException(nameof(pageNumber));
+            }
 
             if (pageSize < 1 || pageSize > 500)
+            {
                 throw new ArgumentOutOfRangeException(nameof(pageSize));
+            }
 
-            // Prevent the multiplication from overflowing an int.
+            // Use long to avoid integer overflow.
             long offset = ((long)pageNumber - 1) * pageSize;
 
             if (offset > int.MaxValue)
+            {
                 throw new ArgumentOutOfRangeException(nameof(pageNumber));
+            }
 
             var observations = new List<FinancialObservation>();
 
@@ -241,6 +253,8 @@ namespace FinancialDataLab.Infrastructure.Repositories
                     ORDER BY ObservationDate, Id
                     OFFSET @Offset ROWS
                     FETCH NEXT @PageSize ROWS ONLY;";
+
+                command.CommandType = CommandType.Text;
 
                 command.Parameters.Add(
                     "@IndicatorCode", SqlDbType.VarChar, 50)
@@ -286,7 +300,6 @@ namespace FinancialDataLab.Infrastructure.Repositories
 
             return observations;
         }
-
 
     }
 }

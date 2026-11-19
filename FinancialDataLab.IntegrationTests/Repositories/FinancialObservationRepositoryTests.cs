@@ -99,6 +99,26 @@ namespace FinancialDataLab.IntegrationTests.Repositories
                     100));
         }
 
+        [Fact]
+        public void GetPage_ReturnsExpectedPageSize()
+        {
+            var repository = new FinancialObservationRepository(
+                BuildConnectionString());
+
+            var observations = repository.GetPage(
+                "EURUSD_DEMO",
+                new DateTime(2026, 11, 1),
+                new DateTime(2027, 3, 1),
+                pageNumber: 2,
+                pageSize: 100);
+
+            Assert.Equal(100, observations.Count);
+            Assert.All(
+                observations,
+                observation => Assert.Equal(
+                    "EURUSD_DEMO",
+                    observation.IndicatorCode));
+        }
         private static string BuildConnectionString()
         {
             // Search upwards for the solution root.
