@@ -60,14 +60,14 @@ Do not put the password in C# code or the repository. A user environment variabl
 
 ## Building from a Clean Clone
 
-A clean-clone build and F5 launch were verified in Visual Studio 2026. For the current development version, use the `develop` branch, which contains the implemented features; `main` may not include the latest changes until the release PR is merged.
+A clean-clone build and F5 launch were verified in Visual Studio 2026. Use `main` as the default and recommended branch for cloning, building, and running the released project. The `develop` branch is used for ongoing integration work; individual changes are developed on `feature/*` branches.
 
-1. Clone the repository, then switch to `develop` from the repository directory:
+1. Clone the repository. Git checks out the default branch (`main`); if you already have the repository locally, switch to it explicitly:
 
    ```powershell
-   git clone <repository-url>
+   git clone https://github.com/llullo/FinancialDataLab.git
    cd FinancialDataLab
-   git switch develop
+   git switch main
    ```
 
 2. Open `FinancialDataLab.slnx` in Visual Studio 2026 and restore the required NuGet packages. The test projects use `packages.config`; restore them through Visual Studio/NuGet if they are not restored automatically.

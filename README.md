@@ -59,7 +59,7 @@ These are local-development credentials, not a production configuration. The add
 
 ## Build and run the add-in
 
-Use Windows with Microsoft Excel desktop and Visual Studio with the VSTO/Office development components and .NET Framework 4.8 targeting pack installed. For a verified Visual Studio 2026 clean-clone build and debug walkthrough, including the local manifest certificate setup, see [Building from a Clean Clone](docs/setup.md#building-from-a-clean-clone). Configure the per-user SQL password before using the add-in to retrieve data. Never commit or distribute a private signing certificate.
+`main` is the default and recommended branch for cloning, building, and running the released project. `develop` is used for ongoing integration work, while individual changes are developed on `feature/*` branches. Use Windows with Microsoft Excel desktop and Visual Studio with the VSTO/Office development components and .NET Framework 4.8 targeting pack installed. For a verified Visual Studio 2026 clean-clone build and debug walkthrough, including local manifest certificate setup, see [Building from a Clean Clone](docs/setup.md#building-from-a-clean-clone). Configure the per-user SQL password before using the add-in to retrieve data. Never commit or distribute a private signing certificate.
 
 ## Run tests
 
