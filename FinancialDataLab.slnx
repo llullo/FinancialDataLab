@@ -1,3 +1,7 @@
 <Solution>
-  <Project Path="FinancialDataLab/FinancialDataLab.csproj" />
+  <Project Path="FinancialDataLab.Application/FinancialDataLab.Application.csproj" Id="110e5da1-9953-4e81-953f-9dc9efebbffb" />
+  <Project Path="FinancialDataLab.Infrastructure/FinancialDataLab.Infrastructure.csproj" Id="153ff995-e682-45b3-a83d-08242c319308" />
+  <Project Path="FinancialDataLab.IntegrationTests/FinancialDataLab.IntegrationTests.csproj" Id="33b5bbc9-7faa-4361-a94a-97961dd3e2f0" />
+  <Project Path="FinancialDataLab.UnitTests/FinancialDataLab.UnitTests.csproj" Id="b692f34e-3ec2-41d5-a753-280ebf051b9a" />
+  <Project Path="FinancialDataLab/FinancialDataLab.csproj" Id="3c8f1196-7bcc-4b34-9c6a-a2673cee84e0" />
 </Solution>
