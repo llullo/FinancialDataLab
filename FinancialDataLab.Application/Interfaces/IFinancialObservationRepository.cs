@@ -17,5 +17,11 @@ namespace FinancialDataLab.Application.Interfaces
             int pageSize,
             DateTime? lastObservationDate,
             int? lastId);
+        IReadOnlyList<FinancialObservation> GetPage(
+            string indicatorCode,
+            DateTime fromDate,
+            DateTime toDate,
+            int pageNumber,
+            int pageSize);
     }
 }
