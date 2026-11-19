@@ -59,9 +59,7 @@ These are local-development credentials, not a production configuration. The add
 
 ## Build and run the add-in
 
-Use Windows with Microsoft Excel desktop and Visual Studio with the VSTO/Office development components and .NET Framework 4.8 targeting pack installed. Open `FinancialDataLab.slnx`, restore the legacy `packages.config` NuGet dependencies if prompted, select the `FinancialDataLab` VSTO project as the startup project, and build it. Configure the per-user password variable before launching Excel. Press **F5** to debug the add-in with Excel, open a workbook, then use the **Financial Data Lab** ribbon tab.
-
-The VSTO project requires manifest signing and references a temporary `.pfx` excluded from Git, so a clean checkout may fail to build until local signing is configured. Follow [docs/setup.md](docs/setup.md#local-vsto-manifest-signing) to create or select a developer test certificate in Visual Studio. Never commit or distribute a private signing certificate.
+Use Windows with Microsoft Excel desktop and Visual Studio with the VSTO/Office development components and .NET Framework 4.8 targeting pack installed. For a verified Visual Studio 2026 clean-clone build and debug walkthrough, including the local manifest certificate setup, see [Building from a Clean Clone](docs/setup.md#building-from-a-clean-clone). Configure the per-user SQL password before using the add-in to retrieve data. Never commit or distribute a private signing certificate.
 
 ## Run tests
 
